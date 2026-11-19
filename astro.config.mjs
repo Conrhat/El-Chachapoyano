@@ -17,6 +17,9 @@ const temaSoloDev = {
 
 // https://astro.build/config
 export default defineConfig({
+  // GitHub Pages: https://conrhat.github.io/El-Chachapoyano/ (con dominio propio: cambiar site y quitar base).
+  site: 'https://conrhat.github.io',
+  base: '/El-Chachapoyano',
   integrations: [react(), temaSoloDev],
 
   vite: {

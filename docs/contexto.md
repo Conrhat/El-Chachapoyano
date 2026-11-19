@@ -168,7 +168,7 @@ Curvas: `ease-salida` para entradas y `ease-rebote` para la tarjeta "+70 platos"
 - Buen contraste y botones de al menos 44 px.
 
 ### Hosting, dominio y mantenimiento
-- **Cloudflare Pages** (gratis, HTTPS, publicación automática desde GitHub).
+- **GitHub Pages** (gratis, HTTPS): repositorio `Conrhat/El-Chachapoyano`, sitio en https://conrhat.github.io/El-Chachapoyano/. GitHub Actions (`.github/workflows/deploy.yml`, `withastro/action`) compila y publica en cada push a `main`. Por vivir en `/El-Chachapoyano/`, `astro.config.mjs` tiene `base`; ninguna ruta del código empieza con `/` (se usa `import.meta.env.BASE_URL`). Con dominio propio: cambiar `site` y quitar `base`.
 - **Dominio** `.pe` o `.com`, registrado a nombre del restaurante; Patrick con acceso de administración. El restaurante no tiene dominio ni hosting todavía.
 - **Cloudflare Web Analytics**, más eventos para Reservar, Pedir y Cómo llegar.
 - El mantenimiento del código lo propone y realiza Patrick.
@@ -510,7 +510,7 @@ Los componentes **no usan colores directos** (`bg-papel`, `text-laguna-800`), si
 4. **Enlace directo a las reseñas de Google.**
 5. **Elegir los componentes concretos de RareUI.**
 6. **Carga inicial de la hoja de Google Sheets:** transcribir los platos del PDF y extraer las fotos.
-7. **Comprar dominio** y configurar Cloudflare Pages.
+7. **Comprar dominio** y apuntarlo a GitHub Pages (CNAME `www` → `conrhat.github.io`).
 
 ---
 

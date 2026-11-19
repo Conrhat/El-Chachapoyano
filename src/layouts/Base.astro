@@ -10,11 +10,15 @@ const {
 } = Astro.props;
 
 const precios = carta.map((p) => p.precio);
-// Schema.org Restaurant (§5). ponytail: sin "url" ni "image" hasta tener dominio.
+// Con base "/El-Chachapoyano" las rutas que empiezan con "/" se rompen: todo pasa por base.
+const base = import.meta.env.BASE_URL.replace(/\/?$/, "/");
+const url = new URL(base, Astro.site).href;
+// Schema.org Restaurant (§5). ponytail: sin "image" hasta tener la imagen para redes.
 const schema = {
   "@context": "https://schema.org",
   "@type": "Restaurant",
   name: negocio.nombre,
+  url,
   servesCuisine: ["Peruana", "Andina", "Amazónica"],
   telephone: `+${negocio.whatsapp}`,
   priceRange: `S/ ${Math.floor(Math.min(...precios))} – ${Math.ceil(Math.max(...precios))}`,
@@ -44,8 +48,10 @@ const schema = {
       if (t ? t === "oscuro" : matchMedia("(prefers-color-scheme: dark)").matches)
         document.documentElement.dataset.tema = "oscuro";
     </script>
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="icon" href="/favicon.ico" />
+    <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
+    <link rel="icon" href={`${base}favicon.ico`} />
+    <link rel="canonical" href={url} />
+    <meta property="og:url" content={url} />
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta property="og:type" content="restaurant" />
