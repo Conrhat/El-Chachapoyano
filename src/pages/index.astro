@@ -1,0 +1,312 @@
+---
+import { Image, Picture } from "astro:assets";
+import Base from "../layouts/Base.astro";
+import BotonTema from "../components/BotonTema.astro";
+import Carta from "../components/Carta.tsx";
+import Reserva from "../components/Reserva.tsx";
+import BarraInferior from "../components/BarraInferior.tsx";
+import { carta, etiquetasDe, opciones } from "../lib/carta.ts";
+import { btn, btn2, enlace, etiquetas } from "../lib/clases.ts";
+import { soles } from "../lib/carrito.ts";
+import { calificaciones, dias, formatoHora, horario, negocio, ordenSemana } from "../lib/negocio.ts";
+import promo from "../data/promo.json";
+
+import logo from "../assets/fotos/logo.png";
+import hero from "../assets/fotos/hero.jpg";
+import fotoPromo from "../assets/fotos/promo.jpg";
+import sierra from "../assets/fotos/sierra.jpg";
+import selva from "../assets/fotos/selva.jpg";
+import patio from "../assets/fotos/patio.jpg";
+import salon from "../assets/fotos/salon.jpg";
+
+const fotos = import.meta.glob<{ default: ImageMetadata }>("../assets/platos/*.jpg", { eager: true });
+const fotoDe = (n: string) => fotos[`../assets/platos/${n}.jpg`]?.default;
+const destacados = carta.filter((p) => p.destacado && p.disponible && p.foto && fotoDe(p.foto));
+
+const icono = { width: 20, height: 20, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", "stroke-width": 1.8, "aria-hidden": "true" };
+const eyebrow = "text-[13px] font-semibold uppercase tracking-[0.18em]";
+const contenedor = "mx-auto max-w-[1120px] px-5";
+---
+<Base>
+  <header class="border-b border-borde bg-fondo">
+    <div class:list={[contenedor, "flex items-center gap-4 py-2.5"]}>
+      <a href="#inicio" class="flex shrink-0 items-center gap-2.5">
+        <Image src={logo} alt="" width={88} class="size-11 rounded-full bg-selva p-[3px] object-contain" />
+        <span class="font-display text-[19px]">El Chachapoyano</span>
+      </a>
+      <nav aria-label="Secciones" class="ml-auto hidden gap-1 sm:flex">
+        <a href="#carta" class="px-3 py-2.5 font-medium">Carta</a>
+        <a href="#reservar" class="px-3 py-2.5 font-medium">Reservas</a>
+        <a href="#ubicacion" class="px-3 py-2.5 font-medium">Ubicación</a>
+      </nav>
+      <div class="ml-auto sm:ml-0"><BotonTema /></div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Portada: siempre en modo noche (estilo de la portada de la carta). -->
+    <section id="inicio" data-tema="oscuro" class="bg-fondo text-texto">
+      <div class:list={[contenedor, "flex flex-wrap items-center gap-10 pt-12 pb-14"]}>
+        <div class="flex min-w-0 flex-[1_1_360px] flex-col gap-5">
+          <p class:list={[eyebrow, "tracking-[0.22em] text-acento"]}>Pollería · Tarapoto</p>
+          <h1 class="text-[clamp(38px,5.4vw,64px)] leading-[1.05]">De Chachapoyas a Tarapoto, en un solo plato.</h1>
+          <p class="max-w-[34em] text-lg text-texto-suave">
+            Cocina andina y amazónica en el Jr. San Pablo de la Cruz. Cuyes, truchas, cecinas, paiches, parrillas y pollo: más de 70 platos.
+          </p>
+          <p class="flex min-h-6 items-center gap-2 text-[15px] text-texto-suave" data-estado hidden>
+            <span class="inline-block size-2.5 rounded-full" data-estado-punto></span>
+            <span class="font-semibold" data-estado-titulo></span>
+            <span data-estado-detalle></span>
+          </p>
+          <div class="mt-1 flex flex-wrap gap-3">
+            <a href="#reservar" class={btn}>Reservar mesa</a>
+            <a href="#carta" class:list={[btn2, "min-h-12 px-6"]}>Ver la carta</a>
+          </div>
+        </div>
+        <div class="relative min-w-0 flex-[1_1_340px]">
+          <Picture
+            src={hero}
+            formats={["avif", "webp"]}
+            widths={[400, 640, 960, 1200]}
+            sizes="(min-width: 1120px) 530px, (min-width: 768px) 45vw, 100vw"
+            alt="Fuente con plato regional chachapoyano, servida en el salón con el cuadro de Chachapoyas al fondo"
+            loading="eager"
+            fetchpriority="high"
+            class="block aspect-[4/5] max-h-[600px] w-full rounded-lg object-cover"
+          />
+          <div class="absolute bottom-6 -left-3 max-w-60 rounded-lg border border-borde bg-tarjeta px-[18px] py-3.5 shadow-flotante">
+            <p class="font-display text-[22px]"><span class="text-acento">✦</span> +70 platos</p>
+            <p class="mt-0.5 text-[13px] text-texto-suave">De la sierra y la selva, en una sola carta.</p>
+          </div>
+        </div>
+      </div>
+      <div class="manta h-3" aria-hidden="true"></div>
+    </section>
+
+    <section aria-labelledby="promo-t">
+      <div class:list={[contenedor, "pt-14 pb-6"]}>
+        <div class="flex flex-wrap overflow-hidden rounded-lg border border-borde bg-tarjeta shadow-md dark:shadow-none">
+          <Image
+            src={fotoPromo}
+            widths={[400, 640, 960]}
+            sizes="(min-width: 768px) 50vw, 100vw"
+            alt="Trucha al horno con queso cajamarquino sobre manta andina"
+            class="block h-[300px] w-full min-w-0 flex-[1_1_320px] object-cover"
+          />
+          <div class="flex min-w-0 flex-[1_1_340px] flex-col justify-center gap-3 p-7">
+            <div class="flex items-center gap-2.5 text-acento">
+              <span class="h-px w-8 bg-acento" aria-hidden="true"></span><span aria-hidden="true">✦</span>
+              <span id="promo-t" class:list={[eyebrow, "text-texto"]}>Promoción de la semana</span>
+            </div>
+            <h2 class="text-3xl leading-tight">{promo.titulo}</h2>
+            <p class="text-[15px] text-texto-suave">{promo.descripcion}</p>
+            <div class="flex flex-wrap items-baseline gap-3">
+              <span class="font-display text-[28px] tabular-nums">{soles(promo.precio)}</span>
+              <span class="text-sm text-texto-suave">Válida hasta el {promo.vigencia}</span>
+            </div>
+            <div>
+              <button type="button" class={btn2} data-agregar={JSON.stringify({ id: "promo", nombre: promo.titulo, precio: promo.precio })}>
+                Pedir esta promo
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {destacados.length > 0 && (
+      <section aria-labelledby="estrella-t">
+        <div class:list={[contenedor, "pt-8 pb-12"]}>
+          <div class="mb-[18px] flex flex-wrap items-end justify-between gap-4">
+            <h2 id="estrella-t" class="text-3xl">Los que más piden</h2>
+            <p class="text-sm text-texto-suave">Desliza para ver más →</p>
+          </div>
+          <ul class="-mx-5 flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-3">
+            {destacados.map((p) => {
+              const o = opciones(p)[0];
+              return (
+                <li class="flex w-[260px] shrink-0 snap-start flex-col overflow-hidden rounded-lg border border-borde bg-tarjeta shadow-sm dark:shadow-none">
+                  <Image src={fotoDe(p.foto!)!} widths={[260, 520]} sizes="260px" alt={p.plato} class="h-[300px] w-full object-cover" />
+                  <div class="flex flex-1 flex-col gap-2 px-4 pt-3.5 pb-4">
+                    <div class="flex min-h-[22px] flex-wrap gap-1.5">
+                      {etiquetasDe(p).map((e) => <span class={e.clase}>{e.texto}</span>)}
+                    </div>
+                    <h3 class="text-[19px] leading-tight">{p.plato}</h3>
+                    <div class="mt-auto flex items-center justify-between gap-2">
+                      <span class="text-[17px] font-semibold tabular-nums">{p.precioEntero ? `desde ${soles(p.precio)}` : soles(p.precio)}</span>
+                      <button type="button" class={btn2} data-agregar={JSON.stringify(o)}>Agregar</button>
+                    </div>
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      </section>
+    )}
+
+    <section id="carta" aria-labelledby="carta-t" class="bg-fondo-alterno">
+      <div class:list={[contenedor, "py-14"]}>
+        <div class="flex items-center justify-center gap-3 text-acento" aria-hidden="true">
+          <span class="h-px w-14 bg-acento"></span>✦<span class="h-px w-14 bg-acento"></span>
+        </div>
+        <h2 id="carta-t" class="mt-2 mb-1.5 text-center text-4xl">Nuestra carta</h2>
+        <p class="mx-auto mb-6 max-w-[36em] text-center text-texto-suave">Arma tu pedido y envíalo por WhatsApp. Para recoger en el local o con delivery.</p>
+        <Carta client:visible platos={carta} />
+      </div>
+    </section>
+
+    <section aria-labelledby="fusion-t">
+      <div class:list={[contenedor, "py-16"]}>
+        <h2 id="fusion-t" class="mb-2 max-w-[16em] text-4xl">Dos regiones, una sola cocina</h2>
+        <p class="mb-7 max-w-[38em] text-texto-suave">
+          La carta junta lo que se come en las alturas de Amazonas con lo que se cocina en la selva de San Martín. Cada plato lleva su origen.
+        </p>
+        <div class="flex flex-wrap gap-5">
+          {[
+            { foto: sierra, alt: "Plato regional chachapoyano con patacones sobre tabla de madera", tag: etiquetas.sierra, titulo: "De Chachapoyas", texto: "Cuy, cecina de res, trucha de laguna, mote blanco y queso cajamarquino." },
+            { foto: selva, alt: "Juane servido con flor y salsa criolla sobre manta", tag: etiquetas.selva, titulo: "De Tarapoto", texto: "Tacacho, juane, paiche, cecina de chancho, maracuyá y camu camu." },
+          ].map((r) => (
+            <div class="flex min-w-0 flex-[1_1_320px] flex-col items-start gap-3.5">
+              <Image src={r.foto} widths={[400, 640, 1100]} sizes="(min-width: 768px) 50vw, 100vw" alt={r.alt} class="h-80 w-full rounded-lg object-cover" />
+              <span class={r.tag.clase}>{r.tag.texto}</span>
+              <h3 class="text-2xl">{r.titulo}</h3>
+              <p class="text-texto-suave">{r.texto}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section aria-labelledby="amb-t" class="bg-fondo-alterno">
+      <div class:list={[contenedor, "py-14"]}>
+        <h2 id="amb-t" class="mb-5 text-3xl">Nuestros ambientes</h2>
+        <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <Image src={patio} widths={[400, 610]} sizes="(min-width: 1024px) 360px, (min-width: 640px) 50vw, 100vw" alt="Patio con toldo turquesa, flores rojas y plantas, con clientes en la mesa" class="h-[380px] w-full rounded-lg object-cover" />
+          <Image src={salon} widths={[400, 610]} sizes="(min-width: 1024px) 360px, (min-width: 640px) 50vw, 100vw" alt="Salón con muro verde, cuadro de Chachapoyas y pizarra de platos" class="h-[380px] w-full rounded-lg object-cover" />
+          <a href={negocio.links.reel} class="flex min-h-[380px] flex-col items-center justify-center gap-3.5 rounded-lg border border-banda-borde bg-banda p-6 text-center text-banda-texto focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foco">
+            <span class="flex size-[72px] items-center justify-center rounded-full border-[1.5px] border-acento text-acento">
+              <svg {...icono} width={28} height={28} stroke-linejoin="round"><path d="M8 5.5v13l11-6.5z" /></svg>
+            </span>
+            <span class="font-display text-2xl">Mira el video tour</span>
+            <span class="text-sm">Recorre el patio y el salón en Instagram</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section aria-labelledby="op-t">
+      <div class:list={[contenedor, "py-14"]}>
+        <h2 id="op-t" class="mb-5 text-3xl">Lo que dicen nuestros clientes</h2>
+        <div class="grid gap-4 sm:grid-cols-2">
+          {[
+            { fuente: "Google Maps", nota: calificaciones.google, href: negocio.links.maps, accion: "Déjanos tu opinión" },
+            { fuente: "Tripadvisor", nota: calificaciones.tripadvisor, href: negocio.links.tripadvisor, accion: "Ver en Tripadvisor" },
+          ].map((o) => (
+            <div class="flex flex-col gap-1.5 rounded-lg border border-borde bg-tarjeta p-5">
+              <p class="text-sm font-semibold text-texto-suave">{o.fuente}</p>
+              {o.nota && (
+                <>
+                  <p class="font-display text-[40px] leading-tight">{o.nota.valor.toLocaleString("es-PE")} <span class="text-[28px] text-acento">★</span></p>
+                  <p class="text-sm text-texto-suave">{o.nota.cantidad} reseñas</p>
+                </>
+              )}
+              <a href={o.href} class:list={[enlace, "mt-2 inline-flex min-h-11 items-center self-start"]}>{o.accion}</a>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section id="reservar" aria-labelledby="reservar-t" class="bg-fondo-alterno">
+      <div class:list={[contenedor, "py-16"]}>
+        <Reserva client:visible />
+      </div>
+    </section>
+
+    <section id="ubicacion" aria-labelledby="ub-t">
+      <div class:list={[contenedor, "flex flex-wrap gap-8 py-16"]}>
+        <iframe
+          title="Mapa: El Chachapoyano en Jr. San Pablo de la Cruz 359, Tarapoto"
+          src={`https://www.google.com/maps?q=${encodeURIComponent("El Chachapoyano, " + negocio.direccion)}&output=embed`}
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          class="min-h-80 min-w-0 flex-[1_1_380px] rounded-lg border border-borde"
+        ></iframe>
+        <div class="flex min-w-0 flex-[1_1_320px] flex-col gap-4">
+          <h2 id="ub-t" class="text-[32px]">Cómo llegar</h2>
+          <p class="text-lg">Jr. San Pablo de la Cruz 359<br /><span class="text-base text-texto-suave">Tarapoto, San Martín</span></p>
+          <table class="w-full border-t border-borde text-[15px]">
+            <caption class="sr-only">Horario de atención</caption>
+            <tbody>
+              {ordenSemana.map((d) => (
+                <tr data-dia={d} class="border-b border-borde data-hoy:bg-fondo-alterno data-hoy:font-semibold">
+                  <th scope="row" class="border-l-[3px] border-transparent px-3 py-2.5 text-left font-normal in-data-hoy:border-acento in-data-hoy:font-semibold">
+                    {dias[d]}<span class="hidden in-data-hoy:inline"> · hoy</span>
+                  </th>
+                  <td class="px-3 py-2.5 text-right tabular-nums">{formatoHora(horario[d][0])} – {formatoHora(horario[d][1])}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <div class="flex flex-wrap gap-2.5">
+            <a href={negocio.links.maps} class={btn2}>Abrir en Google Maps</a>
+            <a href={`https://wa.me/${negocio.whatsapp}`} class={btn2}>Escribir por WhatsApp</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer data-tema="oscuro" class="bg-fondo text-texto">
+    <div class="manta h-2" aria-hidden="true"></div>
+    <div class:list={[contenedor, "flex flex-wrap gap-8 pt-12 pb-32"]}>
+      <div class="min-w-0 flex-[1_1_220px]">
+        <Image src={logo} alt="El Chachapoyano Restaurante" width={140} densities={[1, 2]} />
+      </div>
+      <div class="flex min-w-0 flex-[1_1_200px] flex-col gap-1.5 text-[15px]">
+        <p class:list={[eyebrow, "mb-1 text-acento"]}>Contacto</p>
+        <a href={`https://wa.me/${negocio.whatsapp}`} class="underline">WhatsApp 978 382 572</a>
+        <span class="text-texto-suave">Yape {negocio.yape} (pagos)</span>
+        <span class="text-texto-suave">{negocio.direccion}</span>
+      </div>
+      <div class="flex min-w-0 flex-[1_1_200px] flex-col gap-1.5 text-[15px]">
+        <p class:list={[eyebrow, "mb-1 text-acento"]}>Síguenos</p>
+        <a href={negocio.links.instagram} class="underline">Instagram</a>
+        <a href={negocio.links.facebook} class="underline">Facebook</a>
+        <a href={negocio.links.tripadvisor} class="underline">Tripadvisor</a>
+      </div>
+    </div>
+  </footer>
+
+  <BarraInferior client:idle />
+</Base>
+
+<script>
+  import { agregar, carrito } from "../lib/carrito.ts";
+  import { estado, horaLima } from "../lib/negocio.ts";
+
+  // "Abierto ahora" y el día de hoy en la tabla de horarios (hora de Tarapoto).
+  const [titulo, detalle] = estado().split(" · ");
+  const abierto = titulo.startsWith("Abierto");
+  const caja = document.querySelector<HTMLElement>("[data-estado]")!;
+  caja.querySelector("[data-estado-titulo]")!.textContent = titulo;
+  caja.querySelector("[data-estado-detalle]")!.textContent = `· ${detalle}`;
+  caja.querySelector("[data-estado-titulo]")!.classList.add(abierto ? "text-abierto" : "text-cerrado");
+  caja.querySelector("[data-estado-punto]")!.classList.add(abierto ? "bg-abierto" : "bg-cerrado");
+  caja.hidden = false;
+  document.querySelector(`[data-dia="${horaLima(new Date()).dia}"]`)?.setAttribute("data-hoy", "");
+
+  // Botones "Agregar" fuera de la carta (promo y destacados).
+  const botones = document.querySelectorAll<HTMLButtonElement>("[data-agregar]");
+  for (const b of botones) {
+    b.dataset.texto = b.textContent!.trim();
+    b.addEventListener("click", () => agregar(JSON.parse(b.dataset.agregar!)));
+  }
+  carrito.subscribe(() => {
+    for (const b of botones) {
+      const n = carrito.get().find((x) => x.id === JSON.parse(b.dataset.agregar!).id)?.cantidad ?? 0;
+      b.textContent = n ? `${b.dataset.texto} (${n})` : b.dataset.texto!;
+    }
+  });
+</script>

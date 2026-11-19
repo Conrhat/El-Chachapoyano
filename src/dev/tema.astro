@@ -1,0 +1,131 @@
+---
+// Muestrario del tema en modo claro y noche, lado a lado (docs/contexto.md §6 y §8).
+// Solo en desarrollo: ver astro.config.mjs.
+import Base from "../layouts/Base.astro";
+
+const funciones = [
+  "fondo", "fondo-alterno", "tarjeta", "tarjeta-hover", "borde", "borde-fuerte",
+  "texto", "texto-suave", "banda", "banda-texto", "banda-borde",
+  "boton", "boton-texto", "boton-hover", "boton-activo",
+  "boton2-borde", "boton2-texto", "boton2-hover",
+  "acento", "enlace", "foco", "abierto",
+  "sierra-fondo", "sierra-texto", "selva-fondo", "selva-texto", "fusion-fondo", "fusion-texto", "popular-borde", "popular-texto",
+];
+
+const principal =
+  "min-h-11 rounded-md bg-boton px-5 font-semibold text-boton-texto transition duration-200 ease-salida hover:bg-boton-hover active:scale-[0.98] active:bg-boton-activo focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foco motion-reduce:transition-none";
+const secundario =
+  "min-h-11 rounded-md border-2 border-boton2-borde px-5 font-semibold text-boton2-texto transition duration-200 ease-salida hover:bg-boton2-hover active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foco motion-reduce:transition-none";
+const tarjeta =
+  "block rounded-lg border border-borde bg-tarjeta p-4 transition duration-200 ease-salida hover:border-borde-fuerte hover:shadow-md active:scale-[0.99] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foco motion-reduce:transition-none dark:hover:bg-tarjeta-hover dark:hover:shadow-none";
+const panel = "space-y-10 bg-fondo p-6 text-texto";
+---
+<Base title="Tema · El Chachapoyano">
+  <!-- La página se fuerza a claro; el panel derecho fija el modo noche por su cuenta. -->
+  <script is:inline>document.documentElement.dataset.tema = "claro";</script>
+  <div class="grid lg:grid-cols-2">
+    {["claro", "oscuro"].map((modo) => (
+      <main data-tema={modo} class={panel}>
+        <header>
+          <h1 class="text-3xl">Modo {modo === "claro" ? "claro" : "noche"}</h1>
+          <p class="text-texto-suave">Solo visible en desarrollo.</p>
+        </header>
+
+        <section class="space-y-3">
+          <h2 class="text-xl">Colores por función</h2>
+          <div class="grid grid-cols-2 gap-x-4 gap-y-2 sm:grid-cols-3">
+            {funciones.map((f) => (
+              <div class="flex items-center gap-2 text-xs">
+                <span class="size-7 shrink-0 rounded-sm border border-borde" style={`background: var(--${f})`} />
+                {f}
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section class="space-y-3">
+          <h2 class="text-xl">Etiquetas de origen</h2>
+          <div class="flex flex-wrap gap-2 text-sm font-medium">
+            <span class="rounded-full bg-sierra-fondo px-3 py-1 text-sierra-texto">Sierra</span>
+            <span class="rounded-full bg-selva-fondo px-3 py-1 text-selva-texto">Selva</span>
+            <span class="rounded-full bg-fusion-fondo px-3 py-1 text-fusion-texto">Fusión</span>
+            <span class="rounded-full border border-popular-borde px-3 py-1 text-popular-texto">✦ La más popular</span>
+            <span class="rounded-full border border-borde-fuerte bg-fondo-alterno px-3 py-1 text-texto-suave">Agotado hoy</span>
+          </div>
+        </section>
+
+        <section class="space-y-3">
+          <h2 class="text-xl">Botones (interactivos arriba; estados fijos abajo)</h2>
+          <div class="flex flex-wrap gap-3">
+            <button class={principal}>Reservar mesa</button>
+            <button class={secundario}>Ver la carta</button>
+          </div>
+          <div class="flex flex-wrap gap-3 text-sm">
+            <span class="grid min-h-11 place-items-center rounded-md bg-boton-hover px-4 font-semibold text-boton-texto">hover</span>
+            <span class="grid min-h-11 scale-[0.98] place-items-center rounded-md bg-boton-activo px-4 font-semibold text-boton-texto">activo</span>
+            <span class="grid min-h-11 place-items-center rounded-md bg-boton px-4 font-semibold text-boton-texto outline-2 outline-offset-2 outline-foco">foco</span>
+            <span class="grid min-h-11 place-items-center rounded-md border-2 border-boton2-borde bg-boton2-hover px-4 font-semibold text-boton2-texto">hover 2.º</span>
+            <span class="grid min-h-11 place-items-center rounded-md border-2 border-boton2-borde px-4 font-semibold text-boton2-texto outline-2 outline-offset-2 outline-foco">foco 2.º</span>
+          </div>
+          <p class="text-sm">Texto con <a href="#" class="text-enlace underline">un enlace</a> · <span class="font-semibold text-abierto">● Abierto ahora</span> · <span class="text-acento">✦ ✦ ✦</span></p>
+        </section>
+
+        <section class="space-y-3">
+          <h2 class="text-xl">Carta</h2>
+          <div class="rounded-sm border border-banda-borde bg-banda px-4 py-3 font-display text-xl text-banda-texto">Truchas</div>
+          <a href="#" class={tarjeta}>
+            <div class="flex items-start justify-between gap-4">
+              <div>
+                <p class="font-semibold">Trucha frita</p>
+                <p class="text-sm text-texto-suave">Con papas nativas, arroz y ensalada criolla.</p>
+                <span class="mt-2 flex flex-wrap gap-1.5">
+                  <span class="rounded-full bg-sierra-fondo px-2.5 py-0.5 text-xs font-medium text-sierra-texto">Sierra</span>
+                  <span class="rounded-full border border-popular-borde px-2.5 py-0.5 text-xs font-medium text-popular-texto">✦ La más popular</span>
+                </span>
+              </div>
+              <p class="font-semibold tabular-nums">S/ 28.00</p>
+            </div>
+            <span class="mt-3 inline-grid min-h-11 place-items-center rounded-md border-2 border-boton2-borde px-4 text-sm font-semibold text-boton2-texto">Agregar</span>
+          </a>
+          <div class="rounded-lg border border-borde bg-tarjeta p-4">
+            <div class="flex items-start justify-between gap-4">
+              <div>
+                <p class="font-semibold text-texto-suave">Paiche a la parrilla</p>
+                <span class="mt-2 inline-block rounded-full border border-borde-fuerte bg-fondo-alterno px-2.5 py-0.5 text-xs font-medium text-texto-suave">Agotado hoy</span>
+              </div>
+              <p class="font-semibold tabular-nums text-texto-suave">S/ 38.00</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="space-y-3">
+          <h2 class="text-xl">Radios</h2>
+          <div class="flex flex-wrap gap-3 text-xs">
+            <div class="grid size-16 place-items-center rounded-sm bg-fondo-alterno">sm</div>
+            <div class="grid size-16 place-items-center rounded-md bg-fondo-alterno">md</div>
+            <div class="grid size-16 place-items-center rounded-lg bg-fondo-alterno">lg</div>
+            <div class="grid size-16 place-items-center rounded-xl bg-fondo-alterno">xl</div>
+            <div class="grid size-16 place-items-center rounded-full bg-fondo-alterno">full</div>
+          </div>
+        </section>
+
+        <section class="space-y-3">
+          <h2 class="text-xl">Sombras</h2>
+          <div class="flex flex-wrap gap-5 text-xs">
+            <div class="grid h-20 w-28 place-items-center rounded-lg border border-borde bg-tarjeta shadow-sm">sm</div>
+            <div class="grid h-20 w-28 place-items-center rounded-lg border border-borde bg-tarjeta shadow-md">md</div>
+            <div class="grid h-20 w-28 place-items-center rounded-lg border border-borde bg-tarjeta shadow-lg">lg</div>
+            <div class="grid h-20 w-28 place-items-center rounded-xl border border-borde bg-tarjeta shadow-flotante">flotante</div>
+          </div>
+        </section>
+
+        <section class="space-y-2">
+          <h2 class="text-xl">Tipografía</h2>
+          <p class="font-display text-3xl">Juane de gallina · Cecina con tacacho</p>
+          <p class="text-sm text-texto-suave">Descripción en 14 px, peso 400. Ñ, á, é, í, ó, ú.</p>
+          <p class="font-semibold tabular-nums">S/ 18.00 · S/ 120.50 · S/ 9.90</p>
+        </section>
+      </main>
+    ))}
+  </div>
+</Base>

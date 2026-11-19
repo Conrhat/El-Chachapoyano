@@ -1,0 +1,187 @@
+@import "tailwindcss";
+@import "@fontsource/young-serif/latin.css";
+@import "@fontsource-variable/albert-sans/index.css";
+
+@theme {
+  /* Se eliminan los valores por defecto de Tailwind: solo existen los de la marca */
+  --color-*: initial;
+  --radius-*: initial;
+  --shadow-*: initial;
+
+  /* Colores fijos */
+  --color-papel: #FFFEFA;
+  --color-yuca: #F8E8B8;
+  --color-selva: #0C1A12;
+  --color-madera: #855A37;
+  --color-blanco: #FFFFFF;
+
+  /* Escalas (el tono original de la carta está marcado en la tabla de arriba) */
+  --color-laguna-50: #F0F9F8;
+  --color-laguna-100: #DEEFEF;
+  --color-laguna-200: #BDDEDC;
+  --color-laguna-300: #95C5C3;
+  --color-laguna-400: #71ABA9;
+  --color-laguna-500: #538F8E;
+  --color-laguna-600: #387573;
+  --color-laguna-700: #235D5C;
+  --color-laguna-800: #134948;
+  --color-laguna-900: #083231;
+  --color-laguna-950: #011D1D;
+
+  --color-oro-50: #FFF5EB;
+  --color-oro-100: #FFE7CE;
+  --color-oro-200: #FFCB94;
+  --color-oro-300: #F8A028;
+  --color-oro-400: #DA8A12;
+  --color-oro-500: #B6720A;
+  --color-oro-600: #935A04;
+  --color-oro-700: #744704;
+  --color-oro-800: #5C3600;
+  --color-oro-900: #402400;
+  --color-oro-950: #271300;
+
+  --color-achiote-50: #FFF4F3;
+  --color-achiote-100: #FFE4E3;
+  --color-achiote-200: #FEC5C5;
+  --color-achiote-300: #FD9B9C;
+  --color-achiote-400: #E8777B;
+  --color-achiote-500: #CC585F;
+  --color-achiote-600: #AD3C46;
+  --color-achiote-700: #8F3038;
+  --color-achiote-800: #741824;
+  --color-achiote-900: #530A15;
+  --color-achiote-950: #350108;
+
+  --color-toldo-50: #E9FCF9;
+  --color-toldo-100: #CEF5EF;
+  --color-toldo-200: #9DE6DD;
+  --color-toldo-300: #5BD1C5;
+  --color-toldo-400: #21B5A9;
+  --color-toldo-500: #0C978D;
+  --color-toldo-600: #047971;
+  --color-toldo-700: #046059;
+  --color-toldo-800: #024A45;
+  --color-toldo-900: #00332F;
+  --color-toldo-950: #001E1B;
+
+  --color-musgo-50: #EEFAF9;
+  --color-musgo-100: #E3EEED;
+  --color-musgo-200: #CDD8D8;
+  --color-musgo-300: #B2BDBD;
+  --color-musgo-400: #96A1A0;
+  --color-musgo-500: #778786;
+  --color-musgo-600: #5E6C6C;
+  --color-musgo-700: #475655;
+  --color-musgo-800: #354342;
+  --color-musgo-900: #212E2E;
+  --color-musgo-950: #0E1B1B;
+
+  /* Tipografía */
+  --font-display: "Young Serif", serif;
+  --font-sans: "Albert Sans Variable", "Albert Sans", system-ui, sans-serif; /* @fontsource-variable registra "Albert Sans Variable" */
+
+  /* Radios */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 14px;
+  --radius-xl: 24px;
+
+  /* Sombras (tinte de selva, no gris neutro) */
+  --shadow-sm: 0 1px 2px rgb(12 26 18 / 0.08);
+  --shadow-md: 0 6px 16px -4px rgb(12 26 18 / 0.14), 0 2px 4px rgb(12 26 18 / 0.06);
+  --shadow-lg: 0 18px 40px -10px rgb(12 26 18 / 0.28), 0 4px 12px rgb(12 26 18 / 0.08);
+
+  /* Movimiento */
+  --ease-salida: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-rebote: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@custom-variant dark (&:where([data-tema="oscuro"], [data-tema="oscuro"] *));
+
+:root {
+  --fondo: #FFFEFA;        --fondo-alterno: #FDF7E6;
+  --tarjeta: #FFFFFF;      --tarjeta-hover: #FFFFFF;
+  --borde: #CDD8D8;        --borde-fuerte: #96A1A0;
+  --texto: #134948;        --texto-suave: #5E6C6C;
+  --banda: #134948;        --banda-texto: #F8E8B8;   --banda-borde: transparent;
+  --boton: #134948;        --boton-texto: #FFFEFA;
+  --boton-hover: #235D5C;  --boton-activo: #083231;
+  --boton2-borde: #134948; --boton2-texto: #134948;  --boton2-hover: #F0F9F8;
+  --acento: #F8A028;       --enlace: #235D5C;        --foco: #387573;
+  --abierto: #047971;     --cerrado: #8F3038;
+  --sierra-fondo: #FFE4E3; --sierra-texto: #741824;
+  --selva-fondo: #CEF5EF;  --selva-texto: #024A45;
+  --fusion-fondo: #FFE7CE; --fusion-texto: #5C3600;
+  --popular-borde: #B6720A; --popular-texto: #5C3600;
+  --sombra-flotante: 0 18px 40px -10px rgb(12 26 18 / 0.28), 0 4px 12px rgb(12 26 18 / 0.08);
+  color-scheme: light;
+}
+
+[data-tema="oscuro"] {
+  --fondo: #0C1A12;        --fondo-alterno: #15251C;
+  --tarjeta: #26392E;      --tarjeta-hover: #2F4237;
+  --borde: #3B4E43;        --borde-fuerte: #4B5F53;
+  --texto: #F8E8B8;        --texto-suave: #CDD8D8;
+  --banda: #134948;        --banda-texto: #F8E8B8;   --banda-borde: #387573;
+  --boton: #F8A028;        --boton-texto: #271300;
+  --boton-hover: #FFCB94;  --boton-activo: #DA8A12;
+  --boton2-borde: #F8E8B8; --boton2-texto: #F8E8B8;  --boton2-hover: #2F4237;
+  --acento: #F8A028;       --enlace: #95C5C3;        --foco: #F8A028;
+  --abierto: #5BD1C5;     --cerrado: #FD9B9C;
+  --sierra-fondo: #530A15; --sierra-texto: #FEC5C5;
+  --selva-fondo: #00332F;  --selva-texto: #9DE6DD;
+  --fusion-fondo: #402400; --fusion-texto: #FFCB94;
+  --popular-borde: #F8A028; --popular-texto: #FFCB94;
+  --sombra-flotante: 0 18px 40px -10px rgb(0 0 0 / 0.6), 0 4px 12px rgb(0 0 0 / 0.3);
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-fondo: var(--fondo);               --color-fondo-alterno: var(--fondo-alterno);
+  --color-tarjeta: var(--tarjeta);           --color-tarjeta-hover: var(--tarjeta-hover);
+  --color-borde: var(--borde);               --color-borde-fuerte: var(--borde-fuerte);
+  --color-texto: var(--texto);               --color-texto-suave: var(--texto-suave);
+  --color-banda: var(--banda);               --color-banda-texto: var(--banda-texto);
+  --color-banda-borde: var(--banda-borde);
+  --color-boton: var(--boton);               --color-boton-texto: var(--boton-texto);
+  --color-boton-hover: var(--boton-hover);   --color-boton-activo: var(--boton-activo);
+  --color-boton2-borde: var(--boton2-borde); --color-boton2-texto: var(--boton2-texto);
+  --color-boton2-hover: var(--boton2-hover);
+  --color-acento: var(--acento);             --color-enlace: var(--enlace);
+  --color-foco: var(--foco);                 --color-abierto: var(--abierto);
+  --color-cerrado: var(--cerrado);
+  --color-sierra-fondo: var(--sierra-fondo); --color-sierra-texto: var(--sierra-texto);
+  --color-selva-fondo: var(--selva-fondo);   --color-selva-texto: var(--selva-texto);
+  --color-fusion-fondo: var(--fusion-fondo); --color-fusion-texto: var(--fusion-texto);
+  --color-popular-borde: var(--popular-borde); --color-popular-texto: var(--popular-texto);
+  --shadow-flotante: var(--sombra-flotante);
+}
+
+@layer base {
+  body {
+    @apply bg-fondo font-sans text-texto;
+  }
+  h1, h2, h3, h4 {
+    @apply font-display;
+  }
+}
+
+/* Franja de manta andina: adorno igual en ambos modos (excepción de §8). */
+.manta {
+  background: repeating-linear-gradient(90deg,
+    var(--color-achiote-700) 0 28px, var(--color-oro-300) 28px 40px,
+    var(--color-laguna-800) 40px 64px, var(--color-yuca) 64px 70px,
+    var(--color-achiote-700) 70px 86px, var(--color-toldo-400) 86px 92px);
+}
+
+/* Contador del carrito al agregar un plato. */
+@theme {
+  --animate-rebote: rebote 320ms var(--ease-rebote);
+}
+@keyframes rebote {
+  40% { transform: scale(1.3); }
+}
+
+dialog::backdrop {
+  background: rgb(12 26 18 / 0.55);
+}
