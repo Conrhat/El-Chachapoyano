@@ -111,9 +111,39 @@ La hoja de cálculo es la **única fuente de la carta**. El restaurante edita la
 
 ### Criterio para RareUI y animaciones
 - **Sí:** revelado de texto y secciones al hacer scroll, carruseles deslizables de platos, marquesinas de categorías, contadores animados, galerías de fotos, microinteracciones de botones.
-- **No:** glassmorphism, brillos, partículas, bordes con resplandor, degradados de neón, animaciones infinitas.
-- Duraciones de 150 a 400 ms; solo `transform` y `opacity`.
-- Respetar `prefers-reduced-motion`.
+- **No:** glassmorphism, brillos, partículas, bordes con resplandor, degradados de neón, animaciones infinitas (el pulso de "Abierto ahora" se repite 3 veces y se detiene).
+- **Duraciones:** 150–400 ms para microinteracciones (botones, contador, carrito, personas); 400–700 ms para entradas de contenido. Nada pasa de 700 ms.
+- **Solo `transform` y `opacity`.** Nada de `clip-path`, `width`, `height` ni `top/left` animados.
+- **La imagen principal de la portada nunca empieza oculta** (es el elemento LCP): solo un zoom de `scale(1.06)` a `scale(1)` en 700 ms, sin retraso. El título de la portada termina de aparecer antes de 0,6 s (palabras de 380 ms escalonadas cada 28 ms, sin retraso inicial).
+- **La entrada de la portada es CSS puro** (`@keyframes` + `animation`), para no depender de que cargue JavaScript. Las revelaciones al hacer scroll sí usan JavaScript (`IntersectionObserver` + WAAPI, en `src/lib/animar.ts`); el estado inicial oculto lo pone el propio script, de modo que sin JavaScript todo se ve.
+- Respetar `prefers-reduced-motion`: con la opción activa no hay movimiento; solo se mantiene el cambio suave de colores al pasar de modo claro a noche.
+
+### Catálogo de animaciones (según el diseño)
+| Dónde | Animación | Duración | Retraso |
+|---|---|---|---|
+| Portada: etiqueta "Pollería · Tarapoto" | sube y aparece (24 px) | 520 ms | 0 |
+| Portada: título | palabra por palabra, sube 0,55 em con giro de 3° | 380 ms c/u | 28 ms entre palabras |
+| Portada: texto, estado, botones | suben y aparecen | 520 ms | 250 / 320 / 380 ms |
+| Portada: foto | zoom 1,06 → 1 (siempre visible) | 700 ms | 0 |
+| Portada: tarjeta "+70 platos" | entra desde la izquierda con rebote | 700 ms | 500 ms |
+| Franjas de mantas | se dibujan de izquierda a derecha (`scaleX`) | 700 ms | 200 ms |
+| Punto "Abierto ahora" | onda que crece y se desvanece | 1800 ms × 3 | — |
+| Separadores ✦ | la estrella entra girando con rebote; las líneas se extienden | 520 / 500 ms | — |
+| Títulos de sección | suben y aparecen | 520 ms | al entrar en pantalla |
+| Carrusel "Los que más piden" | tarjetas en cascada desde la derecha | 600 ms | 70 ms entre tarjetas |
+| Flecha "Desliza para ver más" | vaivén de 6 px | 700 ms × 3 | — |
+| Chips de categorías, ambientes | cascada con zoom 0,94 → 1 | 480 ms | 70 ms |
+| "Dos regiones" | Sierra desde la izquierda, Selva desde la derecha | 600 ms | 0 / 120 ms |
+| Horarios | filas en cascada desde la izquierda | 600 ms | 70 ms |
+| Cambio de categoría | banda se reacomoda; platos en cascada | 320 / 380 ms | 45 ms entre platos |
+| Botón "Agregar" | se encoge y rebota | 340 ms | — |
+| Primer plato al carrito | barra inferior sube con rebote | 520 ms | — |
+| Platos siguientes | el total late (escala 1,14) | 320 ms | — |
+| Personas de la reserva | el número entra desde arriba o abajo | 240 ms | — |
+| Botón sol/luna | el ícono gira al cambiar | 420 ms | — |
+| Cambio de modo | transición de colores | 350 ms | — |
+
+Curvas: `ease-salida` para entradas y `ease-rebote` para la tarjeta "+70 platos", las estrellas ✦, la barra del pedido y el ícono sol/luna.
 
 ### Recorrido pensado para retener
 1. Portada con el título revelado palabra por palabra.
@@ -165,7 +195,7 @@ Basada en la carta actual (hecha en Canva por Oscar Ocampo) y en fotos del local
 - Sierra → `bg-sierra-fondo text-sierra-texto`
 - Selva → `bg-selva-fondo text-selva-texto`
 - Fusión → `bg-fusion-fondo text-fusion-texto`
-- La más popular → `border border-popular-borde text-popular-texto` con fondo transparente y el texto "✦ La más popular". No usa los colores de Fusión (se confundirían) ni relleno laguna (regla 2).
+- La más popular → "✦ La más popular" con contorno: `border border-popular-borde text-popular-texto`, fondo transparente
 - Agotado hoy → `bg-fondo-alterno text-texto-suave border border-borde-fuerte`
 
 (Los valores de cada modo están en "Modo noche y colores por función".)
@@ -177,7 +207,7 @@ La carta del bar (morada y fucsia) y la página de Yape no siguen esta línea; e
 |---|---|---|
 | Logo | ArtNuvo (art nouveau) | Logo como imagen SVG/PNG |
 | Títulos | Luthier, Bebas Neue | **Young Serif** |
-| Texto y precios | Luthier, Montserrat | **Albert Sans** (cifras tabulares en precios) |
+| Texto y precios | Luthier, Montserrat | **Albert Sans** (cifras tabulares en precios). En el código se carga con `@fontsource-variable/albert-sans`, que la registra como "Albert Sans Variable" |
 
 ### Elementos gráficos existentes
 - Logo: "EL CHACHAPOYANO / RESTAURANTE" con el sarcófago de Karajía en la letra "A", círculo dorado y laureles.
@@ -236,8 +266,9 @@ La página es plana por defecto. Las sombras tienen el tinte de `selva` (no gris
 | `shadow-lg` | Solo elementos flotantes: barra fija inferior, panel del carrito, aviso "Agregado" |
 
 #### Movimiento
-- `ease-salida` para apariciones y transiciones (150–400 ms).
-- `ease-rebote` solo para el contador del carrito al agregar un plato.
+- `ease-salida` para apariciones y transiciones.
+- `ease-rebote` para los elementos con rebote del catálogo de animaciones (§5).
+- Duraciones y reglas: ver "Criterio para RareUI y animaciones" en §5.
 
 #### Código del tema
 Va en `src/styles/global.css`:
@@ -321,7 +352,7 @@ Va en `src/styles/global.css`:
 
   /* Tipografía */
   --font-display: "Young Serif", serif;
-  --font-sans: "Albert Sans Variable", "Albert Sans", system-ui, sans-serif; /* @fontsource-variable registra "Albert Sans Variable" */
+  --font-sans: "Albert Sans Variable", "Albert Sans", system-ui, sans-serif;
 
   /* Radios */
   --radius-sm: 4px;
@@ -368,12 +399,12 @@ Los componentes **no usan colores directos** (`bg-papel`, `text-laguna-800`), si
 | `enlace` | `#235D5C` (laguna-700) | `#95C5C3` (laguna-300) | 7,5 : 1 / 9,4 : 1 |
 | `foco` | `#387573` (laguna-600) | `#F8A028` (oro-300) | Anillo de foco de teclado, 5,3 : 1 / 5,9 : 1 |
 | `abierto` | `#047971` (toldo-600) | `#5BD1C5` (toldo-300) | Indicador "Abierto ahora" |
-| `cerrado` | `#8F3038` (achiote-700) | `#FD9B9C` (achiote-300) | Indicador "Cerrado ahora" (lo pide el diseño de la landing); 7,9 : 1 sobre papel / 8,8 : 1 sobre selva |
-| `popular-borde` | `#B6720A` (oro-500) | `#F8A028` (oro-300) | Contorno de "✦ La más popular"; 3,9 : 1 sobre blanco / 5,9 : 1 sobre tarjeta. En claro no se usa oro-300 (2,1 : 1) |
-| `popular-texto` | `#5C3600` (oro-800) | `#FFCB94` (oro-200) | 10,6 : 1 / 8,3 : 1 |
 | `sierra-fondo` / `sierra-texto` | achiote-100 / achiote-800 | achiote-900 / achiote-200 | |
 | `selva-fondo` / `selva-texto` | toldo-100 / toldo-800 | toldo-900 / toldo-200 | |
 | `fusion-fondo` / `fusion-texto` | oro-100 / oro-800 | oro-900 / oro-200 | |
+| `cerrado` | `#8F3038` (achiote-700) | `#FD9B9C` (achiote-300) | Indicador "Cerrado ahora" (lo pide el diseño de la landing); 7,9 : 1 sobre papel / 8,8 : 1 sobre selva |
+| `popular-borde` | `#B6720A` (oro-500) | `#F8A028` (oro-300) | 3,9 : 1 sobre blanco / 5,9 : 1 sobre tarjeta |
+| `popular-texto` | `#5C3600` (oro-800) | `#FFCB94` (oro-200) | 10,6 : 1 / 8,3 : 1 |
 
 #### Reglas
 1. **El dorado relleno se reserva para la acción principal.** En modo noche solo llevan fondo dorado "Reservar mesa", "Enviar pedido" y el botón principal de la barra fija; como máximo uno visible por pantalla. "Agregar", "Ver la carta", "Cómo llegar" y similares usan el botón secundario (contorno). El dorado sí se usa en adornos finos (separadores, líneas), donde no compite con el botón.
@@ -393,7 +424,7 @@ Los componentes **no usan colores directos** (`bg-papel`, `text-laguna-800`), si
 | Plato agotado | — | — | — | Ver abajo |
 
 - **Sin botones deshabilitados.** El botón de reserva siempre está activo; si falta un dato, se muestra un mensaje junto al campo. Las horas fuera del horario no aparecen en el selector, así que no hace falta deshabilitarlas.
-- **Plato agotado** (`Disponible = no` en la hoja): se muestra al final de su categoría con la etiqueta "Agotado hoy" (`fondo-alterno` + `texto-suave` + borde `borde-fuerte`: 2,7 : 1 en claro, 1,8 : 1 en noche), el nombre y el precio en `texto-suave` y sin botón "Agregar". No se atenúa con `opacity`. Así el cliente sabe que el plato existe y que puede volver otro día.
+- **Plato agotado** (`Disponible = no` en la hoja): se muestra al final de su categoría con la etiqueta "Agotado hoy" (`fondo-alterno` + `texto-suave` + borde `borde-fuerte`), el nombre y el precio en `texto-suave` y sin botón "Agregar". No se atenúa con `opacity`. Así el cliente sabe que el plato existe y que puede volver otro día.
 - Al pasar el dedo no hay hover en celular: el hover es un extra para computadora; el estado activo es el que se ve al tocar.
 
 #### Activación del modo noche
@@ -475,7 +506,7 @@ Los componentes **no usan colores directos** (`bg-papel`, `text-laguna-800`), si
 
 1. **Nombre:** el PDF se titula "Carta La Retama", la pizarra dice "La Retama Rest Chachapoyano" y hay un plato "Chaufa a la Retama". Confirmar si la web usa solo "El Chachapoyano".
 2. **Portada vigente de la carta:** mármol verde con hexágonos o fondo de hojas de selva.
-3. **Logo en SVG o PNG transparente**, exportado desde Canva.
+3. **Logo:** ya se extrajo del PDF con fondo transparente (489 × 510 px). Pedir a Canva una versión SVG solo si se necesita más grande.
 4. **Enlace directo a las reseñas de Google.**
 5. **Elegir los componentes concretos de RareUI.**
 6. **Carga inicial de la hoja de Google Sheets:** transcribir los platos del PDF y extraer las fotos.

@@ -26,6 +26,7 @@ const destacados = carta.filter((p) => p.destacado && p.disponible && p.foto && 
 const icono = { width: 20, height: 20, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", "stroke-width": 1.8, "aria-hidden": "true" };
 const eyebrow = "text-[13px] font-semibold uppercase tracking-[0.18em]";
 const contenedor = "mx-auto max-w-[1120px] px-5";
+const titulo = "De Chachapoyas a Tarapoto, en un solo plato.";
 ---
 <Base>
   <header class="border-b border-borde bg-fondo">
@@ -48,17 +49,22 @@ const contenedor = "mx-auto max-w-[1120px] px-5";
     <section id="inicio" data-tema="oscuro" class="bg-fondo text-texto">
       <div class:list={[contenedor, "flex flex-wrap items-center gap-10 pt-12 pb-14"]}>
         <div class="flex min-w-0 flex-[1_1_360px] flex-col gap-5">
-          <p class:list={[eyebrow, "tracking-[0.22em] text-acento"]}>Pollería · Tarapoto</p>
-          <h1 class="text-[clamp(38px,5.4vw,64px)] leading-[1.05]">De Chachapoyas a Tarapoto, en un solo plato.</h1>
-          <p class="max-w-[34em] text-lg text-texto-suave">
+          <p data-hero="up" class:list={[eyebrow, "tracking-[0.22em] text-acento"]}>Pollería · Tarapoto</p>
+          <h1 class="text-[clamp(38px,5.4vw,64px)] leading-[1.05]">
+            {titulo.split(" ").map((w, i) => <>{i > 0 && " "}<span data-hero="word" style={`--d:${i * 28}ms`} class="inline-block">{w}</span></>)}
+          </h1>
+          <p data-hero="up" style="--d:250ms" class="max-w-[34em] text-lg text-texto-suave">
             Cocina andina y amazónica en el Jr. San Pablo de la Cruz. Cuyes, truchas, cecinas, paiches, parrillas y pollo: más de 70 platos.
           </p>
-          <p class="flex min-h-6 items-center gap-2 text-[15px] text-texto-suave" data-estado hidden>
-            <span class="inline-block size-2.5 rounded-full" data-estado-punto></span>
+          <p data-hero="up" style="--d:320ms" class="flex min-h-6 items-center gap-2 text-[15px] text-texto-suave" data-estado hidden>
+            <span class="relative inline-block size-2.5">
+              <span class="absolute inset-0 rounded-full" data-estado-punto data-onda></span>
+              <span class="absolute inset-0 rounded-full" data-estado-punto></span>
+            </span>
             <span class="font-semibold" data-estado-titulo></span>
             <span data-estado-detalle></span>
           </p>
-          <div class="mt-1 flex flex-wrap gap-3">
+          <div data-hero="up" style="--d:380ms" class="mt-1 flex flex-wrap gap-3">
             <a href="#reservar" class={btn}>Reservar mesa</a>
             <a href="#carta" class:list={[btn2, "min-h-12 px-6"]}>Ver la carta</a>
           </div>
@@ -72,20 +78,21 @@ const contenedor = "mx-auto max-w-[1120px] px-5";
             alt="Fuente con plato regional chachapoyano, servida en el salón con el cuadro de Chachapoyas al fondo"
             loading="eager"
             fetchpriority="high"
+            data-hero="photo"
             class="block aspect-[4/5] max-h-[600px] w-full rounded-lg object-cover"
           />
-          <div class="absolute bottom-6 -left-3 max-w-60 rounded-lg border border-borde bg-tarjeta px-[18px] py-3.5 shadow-flotante">
+          <div data-hero="spring" style="--d:500ms" class="absolute bottom-6 -left-3 max-w-60 rounded-lg border border-borde bg-tarjeta px-[18px] py-3.5 shadow-flotante">
             <p class="font-display text-[22px]"><span class="text-acento">✦</span> +70 platos</p>
             <p class="mt-0.5 text-[13px] text-texto-suave">De la sierra y la selva, en una sola carta.</p>
           </div>
         </div>
       </div>
-      <div class="manta h-3" aria-hidden="true"></div>
+      <div class="manta h-3 origin-left" data-hero="draw" style="--d:200ms" aria-hidden="true"></div>
     </section>
 
     <section aria-labelledby="promo-t">
       <div class:list={[contenedor, "pt-14 pb-6"]}>
-        <div class="flex flex-wrap overflow-hidden rounded-lg border border-borde bg-tarjeta shadow-md dark:shadow-none">
+        <div data-anim="up" class="flex flex-wrap overflow-hidden rounded-lg border border-borde bg-tarjeta shadow-md dark:shadow-none">
           <Image
             src={fotoPromo}
             widths={[400, 640, 960]}
@@ -95,7 +102,7 @@ const contenedor = "mx-auto max-w-[1120px] px-5";
           />
           <div class="flex min-w-0 flex-[1_1_340px] flex-col justify-center gap-3 p-7">
             <div class="flex items-center gap-2.5 text-acento">
-              <span class="h-px w-8 bg-acento" aria-hidden="true"></span><span aria-hidden="true">✦</span>
+              <span class="h-px w-8 origin-right bg-acento" data-anim="line" aria-hidden="true"></span><span class="inline-block" data-anim="star" aria-hidden="true">✦</span>
               <span id="promo-t" class:list={[eyebrow, "text-texto"]}>Promoción de la semana</span>
             </div>
             <h2 class="text-3xl leading-tight">{promo.titulo}</h2>
@@ -118,10 +125,10 @@ const contenedor = "mx-auto max-w-[1120px] px-5";
       <section aria-labelledby="estrella-t">
         <div class:list={[contenedor, "pt-8 pb-12"]}>
           <div class="mb-[18px] flex flex-wrap items-end justify-between gap-4">
-            <h2 id="estrella-t" class="text-3xl">Los que más piden</h2>
-            <p class="text-sm text-texto-suave">Desliza para ver más →</p>
+            <h2 data-anim="up" id="estrella-t" class="text-3xl">Los que más piden</h2>
+            <p class="text-sm text-texto-suave">Desliza para ver más <span class="inline-block" data-anim="nudge">→</span></p>
           </div>
-          <ul class="-mx-5 flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-3">
+          <ul data-stagger="right" class="-mx-5 flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-3">
             {destacados.map((p) => {
               const o = opciones(p)[0];
               return (
@@ -148,9 +155,9 @@ const contenedor = "mx-auto max-w-[1120px] px-5";
     <section id="carta" aria-labelledby="carta-t" class="bg-fondo-alterno">
       <div class:list={[contenedor, "py-14"]}>
         <div class="flex items-center justify-center gap-3 text-acento" aria-hidden="true">
-          <span class="h-px w-14 bg-acento"></span>✦<span class="h-px w-14 bg-acento"></span>
+          <span class="h-px w-14 origin-right bg-acento" data-anim="line"></span><span class="inline-block" data-anim="star">✦</span><span class="h-px w-14 origin-left bg-acento" data-anim="line"></span>
         </div>
-        <h2 id="carta-t" class="mt-2 mb-1.5 text-center text-4xl">Nuestra carta</h2>
+        <h2 data-anim="up" id="carta-t" class="mt-2 mb-1.5 text-center text-4xl">Nuestra carta</h2>
         <p class="mx-auto mb-6 max-w-[36em] text-center text-texto-suave">Arma tu pedido y envíalo por WhatsApp. Para recoger en el local o con delivery.</p>
         <Carta client:visible platos={carta} />
       </div>
@@ -158,7 +165,7 @@ const contenedor = "mx-auto max-w-[1120px] px-5";
 
     <section aria-labelledby="fusion-t">
       <div class:list={[contenedor, "py-16"]}>
-        <h2 id="fusion-t" class="mb-2 max-w-[16em] text-4xl">Dos regiones, una sola cocina</h2>
+        <h2 data-anim="up" id="fusion-t" class="mb-2 max-w-[16em] text-4xl">Dos regiones, una sola cocina</h2>
         <p class="mb-7 max-w-[38em] text-texto-suave">
           La carta junta lo que se come en las alturas de Amazonas con lo que se cocina en la selva de San Martín. Cada plato lleva su origen.
         </p>
@@ -166,8 +173,8 @@ const contenedor = "mx-auto max-w-[1120px] px-5";
           {[
             { foto: sierra, alt: "Plato regional chachapoyano con patacones sobre tabla de madera", tag: etiquetas.sierra, titulo: "De Chachapoyas", texto: "Cuy, cecina de res, trucha de laguna, mote blanco y queso cajamarquino." },
             { foto: selva, alt: "Juane servido con flor y salsa criolla sobre manta", tag: etiquetas.selva, titulo: "De Tarapoto", texto: "Tacacho, juane, paiche, cecina de chancho, maracuyá y camu camu." },
-          ].map((r) => (
-            <div class="flex min-w-0 flex-[1_1_320px] flex-col items-start gap-3.5">
+          ].map((r, i) => (
+            <div data-anim={i ? "right" : "left"} data-delay={i ? 120 : 0} class="flex min-w-0 flex-[1_1_320px] flex-col items-start gap-3.5">
               <Image src={r.foto} widths={[400, 640, 1100]} sizes="(min-width: 768px) 50vw, 100vw" alt={r.alt} class="h-80 w-full rounded-lg object-cover" />
               <span class={r.tag.clase}>{r.tag.texto}</span>
               <h3 class="text-2xl">{r.titulo}</h3>
@@ -180,12 +187,12 @@ const contenedor = "mx-auto max-w-[1120px] px-5";
 
     <section aria-labelledby="amb-t" class="bg-fondo-alterno">
       <div class:list={[contenedor, "py-14"]}>
-        <h2 id="amb-t" class="mb-5 text-3xl">Nuestros ambientes</h2>
-        <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <h2 data-anim="up" id="amb-t" class="mb-5 text-3xl">Nuestros ambientes</h2>
+        <div data-stagger="zoom" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           <Image src={patio} widths={[400, 610]} sizes="(min-width: 1024px) 360px, (min-width: 640px) 50vw, 100vw" alt="Patio con toldo turquesa, flores rojas y plantas, con clientes en la mesa" class="h-[380px] w-full rounded-lg object-cover" />
           <Image src={salon} widths={[400, 610]} sizes="(min-width: 1024px) 360px, (min-width: 640px) 50vw, 100vw" alt="Salón con muro verde, cuadro de Chachapoyas y pizarra de platos" class="h-[380px] w-full rounded-lg object-cover" />
           <a href={negocio.links.reel} class="flex min-h-[380px] flex-col items-center justify-center gap-3.5 rounded-lg border border-banda-borde bg-banda p-6 text-center text-banda-texto focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foco">
-            <span class="flex size-[72px] items-center justify-center rounded-full border-[1.5px] border-acento text-acento">
+            <span data-anim="star" data-delay="300" class="flex size-[72px] items-center justify-center rounded-full border-[1.5px] border-acento text-acento">
               <svg {...icono} width={28} height={28} stroke-linejoin="round"><path d="M8 5.5v13l11-6.5z" /></svg>
             </span>
             <span class="font-display text-2xl">Mira el video tour</span>
@@ -197,8 +204,8 @@ const contenedor = "mx-auto max-w-[1120px] px-5";
 
     <section aria-labelledby="op-t">
       <div class:list={[contenedor, "py-14"]}>
-        <h2 id="op-t" class="mb-5 text-3xl">Lo que dicen nuestros clientes</h2>
-        <div class="grid gap-4 sm:grid-cols-2">
+        <h2 data-anim="up" id="op-t" class="mb-5 text-3xl">Lo que dicen nuestros clientes</h2>
+        <div data-stagger="up" class="grid gap-4 sm:grid-cols-2">
           {[
             { fuente: "Google Maps", nota: calificaciones.google, href: negocio.links.maps, accion: "Déjanos tu opinión" },
             { fuente: "Tripadvisor", nota: calificaciones.tripadvisor, href: negocio.links.tripadvisor, accion: "Ver en Tripadvisor" },
@@ -207,7 +214,7 @@ const contenedor = "mx-auto max-w-[1120px] px-5";
               <p class="text-sm font-semibold text-texto-suave">{o.fuente}</p>
               {o.nota && (
                 <>
-                  <p class="font-display text-[40px] leading-tight">{o.nota.valor.toLocaleString("es-PE")} <span class="text-[28px] text-acento">★</span></p>
+                  <p class="font-display text-[40px] leading-tight">{o.nota.valor.toLocaleString("es-PE")} <span class="inline-block text-[28px] text-acento" data-anim="star" data-delay="250">★</span></p>
                   <p class="text-sm text-texto-suave">{o.nota.cantidad} reseñas</p>
                 </>
               )}
@@ -231,14 +238,14 @@ const contenedor = "mx-auto max-w-[1120px] px-5";
           src={`https://www.google.com/maps?q=${encodeURIComponent("El Chachapoyano, " + negocio.direccion)}&output=embed`}
           loading="lazy"
           referrerpolicy="no-referrer-when-downgrade"
-          class="min-h-80 min-w-0 flex-[1_1_380px] rounded-lg border border-borde"
+          data-anim="left" class="min-h-80 min-w-0 flex-[1_1_380px] rounded-lg border border-borde"
         ></iframe>
         <div class="flex min-w-0 flex-[1_1_320px] flex-col gap-4">
-          <h2 id="ub-t" class="text-[32px]">Cómo llegar</h2>
+          <h2 data-anim="up" id="ub-t" class="text-[32px]">Cómo llegar</h2>
           <p class="text-lg">Jr. San Pablo de la Cruz 359<br /><span class="text-base text-texto-suave">Tarapoto, San Martín</span></p>
           <table class="w-full border-t border-borde text-[15px]">
             <caption class="sr-only">Horario de atención</caption>
-            <tbody>
+            <tbody data-stagger="left">
               {ordenSemana.map((d) => (
                 <tr data-dia={d} class="border-b border-borde data-hoy:bg-fondo-alterno data-hoy:font-semibold">
                   <th scope="row" class="border-l-[3px] border-transparent px-3 py-2.5 text-left font-normal in-data-hoy:border-acento in-data-hoy:font-semibold">
@@ -259,7 +266,7 @@ const contenedor = "mx-auto max-w-[1120px] px-5";
   </main>
 
   <footer data-tema="oscuro" class="bg-fondo text-texto">
-    <div class="manta h-2" aria-hidden="true"></div>
+    <div class="manta h-2 origin-left" data-anim="draw" aria-hidden="true"></div>
     <div class:list={[contenedor, "flex flex-wrap gap-8 pt-12 pb-32"]}>
       <div class="min-w-0 flex-[1_1_220px]">
         <Image src={logo} alt="El Chachapoyano Restaurante" width={140} densities={[1, 2]} />
@@ -285,6 +292,7 @@ const contenedor = "mx-auto max-w-[1120px] px-5";
 <script>
   import { agregar, carrito } from "../lib/carrito.ts";
   import { estado, horaLima } from "../lib/negocio.ts";
+  import { iniciarEntradas, onda, pop } from "../lib/animar.ts";
 
   // "Abierto ahora" y el día de hoy en la tabla de horarios (hora de Tarapoto).
   const [titulo, detalle] = estado().split(" · ");
@@ -293,7 +301,7 @@ const contenedor = "mx-auto max-w-[1120px] px-5";
   caja.querySelector("[data-estado-titulo]")!.textContent = titulo;
   caja.querySelector("[data-estado-detalle]")!.textContent = `· ${detalle}`;
   caja.querySelector("[data-estado-titulo]")!.classList.add(abierto ? "text-abierto" : "text-cerrado");
-  caja.querySelector("[data-estado-punto]")!.classList.add(abierto ? "bg-abierto" : "bg-cerrado");
+  caja.querySelectorAll("[data-estado-punto]").forEach((p) => p.classList.add(abierto ? "bg-abierto" : "bg-cerrado"));
   caja.hidden = false;
   document.querySelector(`[data-dia="${horaLima(new Date()).dia}"]`)?.setAttribute("data-hoy", "");
 
@@ -301,7 +309,10 @@ const contenedor = "mx-auto max-w-[1120px] px-5";
   const botones = document.querySelectorAll<HTMLButtonElement>("[data-agregar]");
   for (const b of botones) {
     b.dataset.texto = b.textContent!.trim();
-    b.addEventListener("click", () => agregar(JSON.parse(b.dataset.agregar!)));
+    b.addEventListener("click", () => {
+      pop(b);
+      agregar(JSON.parse(b.dataset.agregar!));
+    });
   }
   carrito.subscribe(() => {
     for (const b of botones) {
@@ -309,4 +320,7 @@ const contenedor = "mx-auto max-w-[1120px] px-5";
       b.textContent = n ? `${b.dataset.texto} (${n})` : b.dataset.texto!;
     }
   });
+
+  iniciarEntradas();
+  onda(document.querySelector("[data-onda]"));
 </script>

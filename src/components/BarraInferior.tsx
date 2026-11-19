@@ -1,4 +1,5 @@
-import { useRef, useState, useSyncExternalStore, type FormEvent } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore, type FormEvent } from "react";
+import { latido, subirBarra } from "../lib/animar.ts";
 import { cambiar, cantidad, carrito, mensajePedido, soles, total, vaciar } from "../lib/carrito.ts";
 import { btn, btn2, campo, enlace } from "../lib/clases.ts";
 import { negocio, waLink } from "../lib/negocio.ts";
@@ -12,15 +13,23 @@ export default function BarraInferior() {
   const items = useSyncExternalStore(carrito.subscribe, carrito.get, carrito.get);
   const dialogo = useRef<HTMLDialogElement>(null);
   const n = cantidad(items);
+  const barra = useRef<HTMLDivElement>(null);
+  const resumen = useRef<HTMLParagraphElement>(null);
+  const antes = useRef(0);
+  useEffect(() => {
+    if (n > 0 && antes.current === 0) subirBarra(barra.current);
+    else if (n > antes.current) latido(resumen.current);
+    antes.current = n;
+  }, [n]);
 
   return (
     <div className="fixed inset-x-0 bottom-0 z-20 px-3 pb-3">
-      <div className="mx-auto flex max-w-[720px] items-center gap-2 rounded-xl border border-borde bg-tarjeta p-2.5 shadow-flotante">
+      <div ref={barra} className="mx-auto flex max-w-[720px] items-center gap-2 rounded-xl border border-borde bg-tarjeta p-2.5 shadow-flotante">
         {n > 0 ? (
           <>
-            <p className="min-w-0 flex-1 pl-2" aria-live="polite">
+            <p ref={resumen} className="min-w-0 flex-1 origin-left pl-2" aria-live="polite">
               <span className="block font-semibold">
-                <span key={n} className="inline-block animate-rebote tabular-nums motion-reduce:animate-none">{n}</span>{" "}
+                <span className="tabular-nums">{n}</span>{" "}
                 {n === 1 ? "plato" : "platos"} · <span className="tabular-nums">{soles(total(items))}</span>
               </span>
               <span className="block text-[13px] text-texto-suave">Recojo o delivery · pago con Yape</span>

@@ -1,4 +1,5 @@
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
+import { contador } from "../lib/animar.ts";
 import { btn, btn2, campo } from "../lib/clases.ts";
 import { formatoHora, hoyLima, horasReserva, mensajeReserva, waLink } from "../lib/negocio.ts";
 import Campo from "./Campo.tsx";
@@ -11,6 +12,12 @@ export default function Reserva() {
   const [personas, setPersonas] = useState(2);
   const [comentario, setComentario] = useState("");
   const [errores, setErrores] = useState<Record<string, string>>({});
+  const numero = useRef<HTMLSpanElement>(null);
+  const personasAntes = useRef(personas);
+  useEffect(() => {
+    if (personas !== personasAntes.current) contador(numero.current, personas > personasAntes.current);
+    personasAntes.current = personas;
+  }, [personas]);
 
   // La fecha de hoy se calcula en el navegador (en el servidor sería la fecha de publicación).
   useEffect(() => {
@@ -48,17 +55,17 @@ export default function Reserva() {
     <div className="flex flex-wrap gap-10">
       <div className="flex min-w-0 flex-[1_1_300px] flex-col gap-3">
         <div className="flex items-center gap-2.5 text-acento" aria-hidden="true">
-          <span className="h-px w-8 bg-acento" />✦
+          <span className="h-px w-8 origin-right bg-acento" data-anim="line" /><span className="inline-block" data-anim="star">✦</span>
         </div>
-        <h2 id="reservar-t" className="text-4xl leading-tight">Reserva tu mesa</h2>
+        <h2 data-anim="up" id="reservar-t" className="text-4xl leading-tight">Reserva tu mesa</h2>
         <p className="text-texto-suave">Completa los datos y te llevamos a WhatsApp con el mensaje listo. Te confirmamos por el mismo chat.</p>
-        <div className="mt-3 whitespace-pre-line rounded-lg border border-borde bg-tarjeta p-4 text-sm">
+        <div data-anim="up" data-delay="200" className="mt-3 whitespace-pre-line rounded-lg border border-borde bg-tarjeta p-4 text-sm">
           <span className="mb-1.5 block font-semibold text-texto-suave">Así llegará tu mensaje</span>
           {vista}
         </div>
       </div>
 
-      <form onSubmit={enviar} noValidate className="grid min-w-0 flex-[1_1_380px] grid-cols-2 gap-4 rounded-lg border border-borde bg-tarjeta p-6">
+      <form onSubmit={enviar} noValidate data-anim="right" data-delay="120" className="grid min-w-0 flex-[1_1_380px] grid-cols-2 gap-4 rounded-lg border border-borde bg-tarjeta p-6">
         <Campo etiqueta="Nombre" error={errores.nombre} className="col-span-2">
           <input value={nombre} onChange={(e) => setNombre(e.target.value)} autoComplete="name" placeholder="Rosa Pérez" className={campo} />
         </Campo>
@@ -77,7 +84,7 @@ export default function Reserva() {
           <span id="personas-l" className="text-sm font-semibold">Personas</span>
           <div role="group" aria-labelledby="personas-l" className="flex items-center gap-3">
             <button type="button" aria-label="Una persona menos" onClick={() => setPersonas((p) => Math.max(1, p - 1))} className={`${btn2} size-12 px-0 text-2xl`}>−</button>
-            <span className="min-w-10 text-center font-display text-2xl tabular-nums" aria-live="polite">{personas}</span>
+            <span ref={numero} className="inline-block min-w-10 text-center font-display text-2xl tabular-nums" aria-live="polite">{personas}</span>
             <button type="button" aria-label="Una persona más" onClick={() => setPersonas((p) => Math.min(30, p + 1))} className={`${btn2} size-12 px-0 text-2xl`}>+</button>
           </div>
         </div>

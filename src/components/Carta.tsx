@@ -1,4 +1,5 @@
-import { useState, useSyncExternalStore } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { cambioCategoria, pop } from "../lib/animar.ts";
 import { agregar, carrito, soles } from "../lib/carrito.ts";
 import { etiquetasDe, opciones, subtitulos, type Plato } from "../lib/carta.ts";
 import { btn2 } from "../lib/clases.ts";
@@ -7,6 +8,13 @@ export default function Carta({ platos }: { platos: Plato[] }) {
   const categorias = [...new Set(platos.map((p) => p.categoria))];
   const [cat, setCat] = useState(categorias[0]);
   const items = useSyncExternalStore(carrito.subscribe, carrito.get, carrito.get);
+  const banda = useRef<HTMLDivElement>(null);
+  const listaRef = useRef<HTMLUListElement>(null);
+  const primera = useRef(true);
+  useEffect(() => {
+    if (primera.current) primera.current = false;
+    else cambioCategoria(banda.current, listaRef.current);
+  }, [cat]);
   const cuenta = (id: string) => items.find((x) => x.id === id)?.cantidad ?? 0;
 
   // Los agotados van al final de su categoría.
@@ -14,7 +22,7 @@ export default function Carta({ platos }: { platos: Plato[] }) {
 
   return (
     <>
-      <div role="group" aria-label="Categorías" className="-mx-4 mb-5 flex gap-2 overflow-x-auto px-4 pb-1.5 sm:justify-center">
+      <div role="group" aria-label="Categorías" data-stagger="zoom" className="-mx-4 mb-5 flex gap-2 overflow-x-auto px-4 pb-1.5 sm:justify-center">
         {categorias.map((c) => (
           <button
             key={c}
@@ -30,14 +38,14 @@ export default function Carta({ platos }: { platos: Plato[] }) {
         ))}
       </div>
 
-      <div className="mb-4 rounded-sm border border-banda-borde bg-banda p-3.5 text-center">
+      <div ref={banda} data-anim="zoom" className="mb-4 origin-center rounded-sm border border-banda-borde bg-banda p-3.5 text-center">
         <h3 className="text-[26px] tracking-wide text-banda-texto">{cat}</h3>
         {subtitulos[cat] && (
           <p className="mt-0.5 text-xs font-semibold uppercase tracking-[0.24em] text-acento">{subtitulos[cat]}</p>
         )}
       </div>
 
-      <ul className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
+      <ul ref={listaRef} data-stagger="up" className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
         {lista.map((p) => (
           <li
             key={p.plato}
@@ -59,7 +67,7 @@ export default function Carta({ platos }: { platos: Plato[] }) {
               {p.disponible && (
                 <div className="ml-auto flex gap-2">
                   {opciones(p).map((o) => (
-                    <button key={o.id} type="button" onClick={() => agregar(o)} className={`${btn2} text-sm tabular-nums`}>
+                    <button key={o.id} type="button" onClick={(e) => { pop(e.currentTarget); agregar(o); }} className={`${btn2} text-sm tabular-nums`}>
                       {o.etiqueta ? `${o.etiqueta} · ${soles(o.precio)}` : "Agregar"}
                       {cuenta(o.id) > 0 && ` (${cuenta(o.id)})`}
                     </button>

@@ -164,6 +164,12 @@
   h1, h2, h3, h4 {
     @apply font-display;
   }
+  /* Cambio suave entre modo claro y noche (diseño de la landing). */
+  @media (prefers-reduced-motion: no-preference) {
+    body, header, section, footer, article, li, form, input, select, textarea {
+      transition: background-color 0.35s ease, color 0.35s ease, border-color 0.35s ease;
+    }
+  }
 }
 
 /* Franja de manta andina: adorno igual en ambos modos (excepción de §8). */
@@ -174,13 +180,20 @@
     var(--color-achiote-700) 70px 86px, var(--color-toldo-400) 86px 92px);
 }
 
-/* Contador del carrito al agregar un plato. */
-@theme {
-  --animate-rebote: rebote 320ms var(--ease-rebote);
+/* Entrada de la portada: CSS puro (§5), no espera a JavaScript. Retraso en --d. La foto nunca empieza oculta (LCP). */
+@media (prefers-reduced-motion: no-preference) {
+  [data-hero] { animation: 520ms var(--ease-salida) var(--d, 0ms) backwards; }
+  [data-hero="up"] { animation-name: hero-up; }
+  [data-hero="word"] { animation-name: hero-word; animation-duration: 380ms; }
+  [data-hero="photo"] { animation-name: hero-photo; animation-duration: 700ms; }
+  [data-hero="draw"] { animation-name: hero-draw; animation-duration: 700ms; }
+  [data-hero="spring"] { animation-name: hero-spring; animation-duration: 700ms; animation-timing-function: var(--ease-rebote); }
 }
-@keyframes rebote {
-  40% { transform: scale(1.3); }
-}
+@keyframes hero-up { from { opacity: 0; transform: translateY(24px); } }
+@keyframes hero-word { from { opacity: 0; transform: translateY(0.55em) rotate(3deg); } }
+@keyframes hero-photo { from { transform: scale(1.06); } }
+@keyframes hero-draw { from { transform: scaleX(0); } }
+@keyframes hero-spring { from { opacity: 0; transform: translateX(-56px); } }
 
 dialog::backdrop {
   background: rgb(12 26 18 / 0.55);
