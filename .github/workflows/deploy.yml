@@ -4,6 +4,11 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  # Reconstruye cada hora para traer los cambios de la hoja de Google Sheets.
+  # ponytail: GitHub pausa los cron tras 60 días sin commits; si pasa, reactivar en Actions
+  # (o un Apps Script en la hoja que dispare el workflow al editar).
+  schedule:
+    - cron: "0 * * * *"
 
 permissions:
   contents: read

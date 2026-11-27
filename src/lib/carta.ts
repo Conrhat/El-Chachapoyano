@@ -1,7 +1,6 @@
-import datos from "../data/carta.json";
 import { etiquetas } from "./clases.ts";
 
-// Una fila de la pestaña `Carta` de la hoja (docs/contexto.md §4).
+// Una fila de la pestaña `Carta` de la hoja (docs/contexto.md §4); se carga en hoja.ts.
 export type Plato = {
   categoria: string;
   plato: string;
@@ -17,7 +16,6 @@ export type Plato = {
 
 // Filas sin nombre o con precio vacío/inválido se omiten.
 export const valida = (p: Plato) => !!p.plato?.trim() && Number.isFinite(p.precio) && p.precio > 0;
-export const carta = (datos as Plato[]).filter(valida);
 
 export const slug = (s: string) =>
   s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");

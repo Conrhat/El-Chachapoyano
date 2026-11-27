@@ -82,10 +82,12 @@ Comentario: cumpleaños
 
 La hoja de cálculo es la **única fuente de la carta**. El restaurante edita la hoja y la web se actualiza sola: muestra los platos por categoría y alimenta el armado interactivo del pedido. La web no enlaza ni muestra el PDF.
 
-- **Pestaña `Carta`:** Categoría · Plato · Descripción · Precio · Origen (Sierra / Selva / Fusión / vacío) · Destacado (sí/no) · Popular (sí/no) · Disponible (sí/no).
+- **Pestaña `Carta`:** Categoría · Plato · Descripción · Precio · Precio entero (solo cuyes: el Precio es el ½) · Origen (Sierra / Selva / Fusión / vacío) · Destacado (sí/no) · Popular (sí/no) · Disponible (sí/no; vacío = sí) · Foto (nombre de un archivo en `src/assets/platos`, sin extensión).
 - **Pestaña `Promo`:** Título · Descripción · Precio · Vigencia.
-- La hoja se publica como CSV y la web la lee al abrirse.
-- Al construir la página se guarda una copia JSON de los datos de la hoja; si Google Sheets no responde, la web usa esa copia.
+- La hoja se comparte como "Cualquier persona con el enlace: Lector" y su ID va en `HOJA_ID` (`src/lib/hoja.ts`). La web la lee **al construir**; el workflow de deploy se ejecuta cada hora, así que los cambios tardan hasta ~1 h en verse.
+- Si Google Sheets no responde o la pestaña viene vacía, se usan `src/data/carta.json` / `promo.json`.
+- La sección de promo se oculta si la pestaña `Promo` no tiene precio.
+- Archivo para crear la hoja: `docs/carta-google-sheets.xlsx` (Archivo → Importar en Google Sheets).
 - Las filas con precio vacío o inválido se omiten.
 - **Carga inicial (una sola vez):** los platos, precios y descripciones se transcriben desde el PDF actual a la hoja, y las fotos se extraen del PDF. Después de eso el PDF ya no se usa.
 

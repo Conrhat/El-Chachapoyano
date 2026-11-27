@@ -5,11 +5,11 @@ import BotonTema from "../components/BotonTema.astro";
 import Carta from "../components/Carta.tsx";
 import Reserva from "../components/Reserva.tsx";
 import BarraInferior from "../components/BarraInferior.tsx";
-import { carta, etiquetasDe, opciones } from "../lib/carta.ts";
+import { etiquetasDe, opciones } from "../lib/carta.ts";
+import { carta, promo } from "../lib/hoja.ts";
 import { btn, btn2, enlace, etiquetas } from "../lib/clases.ts";
 import { soles } from "../lib/carrito.ts";
 import { calificaciones, dias, formatoHora, horario, negocio, ordenSemana } from "../lib/negocio.ts";
-import promo from "../data/promo.json";
 
 import logo from "../assets/fotos/logo.png";
 import hero from "../assets/fotos/hero.jpg";
@@ -90,6 +90,7 @@ const titulo = "De Chachapoyas a Tarapoto, en un solo plato.";
       <div class="manta h-3 origin-left" data-hero="draw" style="--d:200ms" aria-hidden="true"></div>
     </section>
 
+    {promo.precio > 0 && (
     <section aria-labelledby="promo-t">
       <div class:list={[contenedor, "pt-14 pb-6"]}>
         <div data-anim="up" class="flex flex-wrap overflow-hidden rounded-lg border border-borde bg-tarjeta shadow-md dark:shadow-none">
@@ -120,6 +121,7 @@ const titulo = "De Chachapoyas a Tarapoto, en un solo plato.";
         </div>
       </div>
     </section>
+    )}
 
     {destacados.length > 0 && (
       <section aria-labelledby="estrella-t">
